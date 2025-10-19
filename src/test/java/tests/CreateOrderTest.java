@@ -1,5 +1,7 @@
 package tests;
 
+import data.TestData;
+import jdk.jfr.Description;
 import models.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +22,7 @@ public class CreateOrderTest extends BaseTest {
         this.colors = colors;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1}")
     public static Object[][] getColorData() {
         return new Object[][] {
                 {Arrays.asList("BLACK")},
@@ -31,20 +33,24 @@ public class CreateOrderTest extends BaseTest {
     }
 
     @Test
+    @Description("Создание заказа с разными цветами")
     public void createOrderWithDifferentColorsTest() {
         Order order = new Order(
-                "Иван",
-                "Иванов",
-                "Москва, ул. Ленина, д. 1",
-                "4",
-                "+79999999999",
-                3,
-                "2024-12-31",
-                "Комментарий к заказу",
+                TestData.getRandomFirstName(),
+                TestData.getRandomLastName(),
+                TestData.getRandomAddress(),
+                TestData.getRandomMetroStation(),
+                TestData.getRandomPhone(),
+                TestData.getRandomRentTime(),
+                TestData.getRandomDeliveryDate(),
+                TestData.getRandomComment(),
                 colors
         );
 
         Response response = orderSteps.createOrder(order);
         orderSteps.checkOrderCreatedSuccessfully(response);
+
+        createdOrderTrack = response.jsonPath().getString("track");
     }
+
 }

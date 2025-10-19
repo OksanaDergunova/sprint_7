@@ -6,6 +6,7 @@ import models.Order;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
+import static org.apache.http.HttpStatus.*;
 
 public class OrderSteps {
 
@@ -15,26 +16,26 @@ public class OrderSteps {
                 .header("Content-type", "application/json")
                 .body(order)
                 .when()
-                .post("/api/v1/orders");
+                .post(Endpoints.ORDERS.get());
     }
 
     @Step("Получение списка заказов")
     public Response getOrdersList() {
         return given()
-                .get("/api/v1/orders");
+                .get(Endpoints.ORDERS.get());
     }
 
     @Step("Проверка успешного создания заказа")
     public void checkOrderCreatedSuccessfully(Response response) {
         response.then()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .body("track", notNullValue());
     }
 
     @Step("Проверка наличия списка заказов в ответе")
     public void checkOrdersListNotEmpty(Response response) {
         response.then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("orders", notNullValue());
     }
 }

@@ -16,6 +16,7 @@
         <!-- версии зависимостей -->
         <junit.version>4.13.2</junit.version>
         <rest-assured.version>5.3.0</rest-assured.version>
+        <data-faker.version>2.5.0</data-faker.version>
 
         <!-- версия Aspectj -->
         <aspectj.version>1.9.7</aspectj.version>
@@ -26,6 +27,14 @@
     </properties>
 
     <dependencies>
+        <!-- DataFaker -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${data-faker.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JUnit 4 -->
         <dependency>
             <groupId>junit</groupId>

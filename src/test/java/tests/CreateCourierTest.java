@@ -1,7 +1,7 @@
 package tests;
 
 import data.TestData;
-import io.qameta.allure.junit4.DisplayName;
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import models.Courier;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.junit.Test;
 public class CreateCourierTest extends BaseTest{
 
     @Test
-    @DisplayName("Успешное создание курьера")
+    @Description("Успешное создание курьера")
     public void createCourierTest() {
         String login = TestData.getRandomLogin();
         String password = TestData.getRandomPassword();
@@ -26,7 +26,7 @@ public class CreateCourierTest extends BaseTest{
     }
 
     @Test
-    @DisplayName("Нельзя создать двух одинаковых курьеров")
+    @Description("Нельзя создать двух одинаковых курьеров")
     public void createConflictCourier() {
         String login = TestData.getRandomLogin();
         String password = TestData.getRandomPassword();
@@ -44,7 +44,7 @@ public class CreateCourierTest extends BaseTest{
     }
 
     @Test
-    @DisplayName("Нельзя создать курьера, не введя все поля")
+    @Description("Нельзя создать курьера, не введя все поля")
     public void createCourierWithoutLogin() {
         String login = "";
         String password = TestData.getRandomPassword();

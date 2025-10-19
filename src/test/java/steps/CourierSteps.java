@@ -8,6 +8,7 @@ import models.CourierAuth;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.apache.http.HttpStatus.*;
 
 public class CourierSteps {
 
@@ -17,7 +18,7 @@ public class CourierSteps {
                 .header("Content-type", "application/json")
                 .body(courier)
                 .when()
-                .post("/api/v1/courier");
+                .post(Endpoints.CREATE_COURIER.get());
     }
 
     @Step("Логин курьера")
@@ -26,28 +27,28 @@ public class CourierSteps {
                 .header("Content-type", "application/json")
                 .body(courier)
                 .when()
-                .post("/api/v1/courier/login");
+                .post(Endpoints.LOGIN_COURIER.get());
     }
 
     //Create
     @Step("Проверка успешного создания курьера")
     public void checkCourierCreatedSuccessfully(Response response) {
         response.then()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .body("ok", equalTo(true));
     }
 
     @Step("Проверка конфликта при создании курьера")
     public void checkCourierConflict(Response response) {
         response.then()
-                .statusCode(409)
+                .statusCode(SC_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
 
     @Step("Проверка ошибки при неполных данных")
     public void checkInsufficientDataError(Response response) {
         response.then()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
@@ -55,21 +56,21 @@ public class CourierSteps {
     @Step("Проверка успешной авторизации курьера")
     public void checkCourierLoginSuccessfully(Response response) {
         response.then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("id", notNullValue());
     }
 
     @Step("Запрос с несуществующей парой логин-пароль")
     public void checkLoginWithWrongPass(Response response){
         response.then()
-                .statusCode(404)
+                .statusCode(SC_NOT_FOUND)
                 .body("message", equalTo("Учетная запись не найдена"));
     }
 
     @Step("Проверка авторизации при неполных данных")
-    public void checkInsufficientLoginError(Response response) {
+    public void checkInsufficientError(Response response) {
         response.then()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для входа"));
     }
 

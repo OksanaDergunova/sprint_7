@@ -1,26 +1,33 @@
 package tests;
 
 import data.TestData;
-import io.qameta.allure.junit4.DisplayName;
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import models.Courier;
 import models.CourierAuth;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class LoginCourierTest extends BaseTest{
 
+    private String login;
+    private String password;
+    private String firstName;
+
+    @Before
+    public void before(){
+        login = TestData.getRandomLogin();
+        password = TestData.getRandomPassword();
+        firstName = TestData.getRandomFirstName();
+    }
+
     @Test
-    @DisplayName("Успешная авторизация курьера")
+    @Description("Успешная авторизация курьера")
     public void loginCourierTest() {
-        String login = TestData.getRandomLogin();
-        String password = TestData.getRandomPassword();
-        String firstName = TestData.getRandomFirstName();
 
         Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
-
-        createdCourierLogin = login;
-        createdCourierPass = password;
 
         // Пытаемся авторизоваться
         CourierAuth courierAuth = new CourierAuth(login,password);
@@ -30,17 +37,11 @@ public class LoginCourierTest extends BaseTest{
     }
 
     @Test
-    @DisplayName("Ошибка авторизации с неверным паролем")
+    @Description("Ошибка авторизации с неверным паролем")
     public void loginWithWrongPasswordTest() {
-        String login = TestData.getRandomLogin();
-        String password = TestData.getRandomPassword();
-        String firstName = TestData.getRandomFirstName();
 
         Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
-
-        createdCourierLogin = login;
-        createdCourierPass = password;
 
         // Пытаемся авторизоваться с неверным паролем
         CourierAuth wrongAuth = new CourierAuth(login, "wrong_password");
@@ -50,17 +51,11 @@ public class LoginCourierTest extends BaseTest{
     }
 
     @Test
-    @DisplayName("Ошибка авторизации с неверным логином")
+    @Description("Ошибка авторизации с неверным логином")
     public void loginWithWrongLoginTest() {
-        String login = TestData.getRandomLogin();
-        String password = TestData.getRandomPassword();
-        String firstName = TestData.getRandomFirstName();
 
         Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
-
-        createdCourierLogin = login;
-        createdCourierPass = password;
 
         // Пытаемся авторизоваться с неверным логином
         CourierAuth wrongAuth = new CourierAuth("wrong_login", password);
@@ -70,22 +65,36 @@ public class LoginCourierTest extends BaseTest{
     }
 
     @Test
-    @DisplayName("Ошибка авторизации без логина")
+    @Description("Ошибка авторизации без логина")
     public void loginWithoutLoginTest() {
-        String login = TestData.getRandomLogin();
-        String password = TestData.getRandomPassword();
-        String firstName = TestData.getRandomFirstName();
 
         Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
 
-        createdCourierLogin = login;
-        createdCourierPass = password;
-
-        // Пытаемся авторизоваться с неверным паролем
+        // Пытаемся авторизоваться без логина
         CourierAuth wrongAuth = new CourierAuth("", password);
         Response response = courierSteps.loginCourier(wrongAuth);
 
-        courierSteps.checkInsufficientLoginError(response);
+        courierSteps.checkInsufficientError(response);
+    }
+
+    @Test
+    @Description("Ошибка авторизации без пароля")
+    public void loginWithoutPassTest() {
+
+        Courier courier = new Courier(login, password, firstName);
+        courierSteps.createCourier(courier);
+
+        // Пытаемся авторизоваться без пароля
+        CourierAuth wrongAuth = new CourierAuth(login, "");
+        Response response = courierSteps.loginCourier(wrongAuth);
+
+        courierSteps.checkInsufficientError(response);
+    }
+
+    @After
+    public void after(){
+        createdCourierLogin = login;
+        createdCourierPass = password;
     }
 }
