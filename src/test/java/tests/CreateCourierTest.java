@@ -44,10 +44,23 @@ public class CreateCourierTest extends BaseTest{
     }
 
     @Test
-    @Description("Нельзя создать курьера, не введя все поля")
+    @Description("Нельзя создать курьера, не введя логин")
     public void createCourierWithoutLogin() {
         String login = "";
         String password = TestData.getRandomPassword();
+        String firstName = TestData.getRandomFirstName();
+
+        Courier courier = new Courier(login, password, firstName);
+        Response response = courierSteps.createCourier(courier);
+
+        courierSteps.checkInsufficientDataError(response);
+    }
+
+    @Test
+    @Description("Нельзя создать курьера, не введя пароль")
+    public void createCourierWithoutPass() {
+        String login = TestData.getRandomLogin();
+        String password = "";
         String firstName = TestData.getRandomFirstName();
 
         Courier courier = new Courier(login, password, firstName);

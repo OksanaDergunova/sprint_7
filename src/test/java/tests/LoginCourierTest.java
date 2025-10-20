@@ -14,19 +14,20 @@ public class LoginCourierTest extends BaseTest{
     private String login;
     private String password;
     private String firstName;
+    private Courier courier;
 
     @Before
     public void before(){
         login = TestData.getRandomLogin();
         password = TestData.getRandomPassword();
         firstName = TestData.getRandomFirstName();
+        courier = new Courier(login, password, firstName);
     }
 
     @Test
     @Description("Успешная авторизация курьера")
     public void loginCourierTest() {
 
-        Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
 
         // Пытаемся авторизоваться
@@ -54,7 +55,6 @@ public class LoginCourierTest extends BaseTest{
     @Description("Ошибка авторизации с неверным логином")
     public void loginWithWrongLoginTest() {
 
-        Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
 
         // Пытаемся авторизоваться с неверным логином
@@ -68,7 +68,6 @@ public class LoginCourierTest extends BaseTest{
     @Description("Ошибка авторизации без логина")
     public void loginWithoutLoginTest() {
 
-        Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
 
         // Пытаемся авторизоваться без логина
@@ -82,7 +81,6 @@ public class LoginCourierTest extends BaseTest{
     @Description("Ошибка авторизации без пароля")
     public void loginWithoutPassTest() {
 
-        Courier courier = new Courier(login, password, firstName);
         courierSteps.createCourier(courier);
 
         // Пытаемся авторизоваться без пароля
